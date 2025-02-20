@@ -132,35 +132,43 @@
     }
 
     function divide() {
+        if (previousNum) {
+            evaluateExpression();
+        }
         currentOp = '/';
-        topLine = currentNum + " " + currentOp;
-        document.getElementById("top").textContent = topLine;
-        previousNum = currentNum;
-        currentNum = undefined;
+        opCleanUp();
     }
 
     function multiply() {
+        if (previousNum) {
+            evaluateExpression();
+        }
         currentOp = '*';
-        topLine = currentNum + " " + currentOp;
-        document.getElementById("top").textContent = topLine;
-        previousNum = currentNum;
-        currentNum = undefined;
+        opCleanUp();
     }
 
     function addition() {
+        if (previousNum) {
+            evaluateExpression();
+        }
         currentOp = '+';
-        topLine = currentNum + " " + currentOp;
-        document.getElementById("top").textContent = topLine;
-        previousNum = currentNum;
-        currentNum = undefined;
+        opCleanUp();
     }
 
     function subtraction() {
+        if (previousNum) {
+            evaluateExpression();
+        }
         currentOp = '-';
+        opCleanUp();
+    }
+
+    function opCleanUp() {
         topLine = currentNum + " " + currentOp;
         document.getElementById("top").textContent = topLine;
         previousNum = currentNum;
         currentNum = undefined;
+        document.getElementById("bottom").textContent = currentNum;
     }
 
     function evaluateExpression() {
