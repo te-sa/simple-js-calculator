@@ -17,7 +17,7 @@
             background: linear-gradient(90deg, rgba(0, 159, 255, 1) 0%, rgba(80, 212, 195, 1) 50%, rgba(34, 242, 62, 1) 100%);
         }
 
-        .number-pad-wrapper {
+        #number-pad-wrapper {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(5, 1fr);
@@ -79,31 +79,102 @@
         <p id="top"></p>
         <p id="bottom"></p>
     </div>
-    <div class="number-pad-wrapper">
-        <button style="grid-area: ac" onclick="allClear()">AC</button>
-        <button style="grid-area: del" onclick="deleteDigit()">DEL</button>
-        <button style="grid-area: div" onclick="divide()">/</button>
-        <button style="grid-area: one" onclick="assignNum('1')">1</button>
-        <button style="grid-area: two" onclick="assignNum('2')">2</button>
-        <button style="grid-area: three" onclick="assignNum('3')">3</button>
-        <button style="grid-area: times" onclick="multiply()">*</button>
-        <button style="grid-area: four" onclick="assignNum('4')">4</button>
-        <button style="grid-area: five" onclick="assignNum('5')">5</button>
-        <button style="grid-area: six" onclick="assignNum('6')">6</button>
-        <button style="grid-area: plus" onclick="add()">+</button>
-        <button style="grid-area: seven" onclick="assignNum('7')">7</button>
-        <button style="grid-area: eight" onclick="assignNum('8')">8</button>
-        <button style="grid-area: nine" onclick="assignNum('9')">9</button>
-        <button style="grid-area: minus" onclick="subtract()">-</button>
-        <button style="grid-area: period" onclick="decimalNum()">.</button>
-        <button style="grid-area: zero" onclick="assignNum('0')">0</button>
-        <button style="grid-area: equals" onclick="evaluateExpression()">=</button>
+    <div id="number-pad-wrapper">
+        <button style="grid-area: ac">AC</button>
+        <button style="grid-area: del">DEL</button>
+        <button style="grid-area: div">/</button>
+        <button style="grid-area: one">1</button>
+        <button style="grid-area: two">2</button>
+        <button style="grid-area: three">3</button>
+        <button style="grid-area: times">*</button>
+        <button style="grid-area: four">4</button>
+        <button style="grid-area: five">5</button>
+        <button style="grid-area: six">6</button>
+        <button style="grid-area: plus">+</button>
+        <button style="grid-area: seven">7</button>
+        <button style="grid-area: eight">8</button>
+        <button style="grid-area: nine">9</button>
+        <button style="grid-area: minus">-</button>
+        <button style="grid-area: period">.</button>
+        <button style="grid-area: zero">0</button>
+        <button style="grid-area: equals">=</button>
     </div>
 </div>
 <script>
     let topLine;
     let currentNum, previousNum;
     let currentOp;
+
+    const numberPad = document.getElementById('number-pad-wrapper');
+
+    numberPad.addEventListener("click", (event) => {
+        if (event.target.tagName === 'BUTTON') {
+            const buttonText = event.target.innerText;
+
+            switch (buttonText) {
+                case "AC":
+                    allClear();
+                    break;
+                case "DEL":
+                    deleteDigit();
+                    break;
+                case "/":
+                case "*":
+                case "+":
+                    handleOperator(buttonText);
+                    break;
+                case "-":
+                    subtract();
+                    break;
+                case "=":
+                    evaluateExpression();
+                    break;
+                case ".":
+                    decimalNum();
+                    break;
+                case "0":
+                case "1":
+                case "2":
+                case "3":
+                case "4":
+                case "5":
+                case "6":
+                case "7":
+                case "8":
+                case "9":
+                    assignNum(buttonText);
+                    break;
+                default:
+                    console.error("Unknown value/operator: " + buttonText)
+            }
+        }
+    })
+
+    function handleOperator(operator) {
+        if (previousNum) {
+            evaluateExpression();
+        }
+        currentOp = operator;
+        opCleanUp();
+    }
+
+    function subtract() {
+        // If no number has been entered, - is not an operator, but the start of a negative number
+        if (!currentNum) {
+            currentNum = "-";
+            document.getElementById("bottom").textContent = currentNum;
+            return;
+        }
+
+        // Don't want the user to enter "- -"
+        if (currentNum !== "-") {
+            if (previousNum) {
+                evaluateExpression();
+            }
+            currentOp = '-';
+            opCleanUp();
+        }
+    }
 
     function assignNum(num) {
         if (!currentNum) {
@@ -129,48 +200,6 @@
         const numWithoutLastDigit = String(currentNum).slice(0, -1);
         document.getElementById("bottom").textContent = numWithoutLastDigit;
         currentNum = numWithoutLastDigit;
-    }
-
-    function divide() {
-        if (previousNum) {
-            evaluateExpression();
-        }
-        currentOp = '/';
-        opCleanUp();
-    }
-
-    function multiply() {
-        if (previousNum) {
-            evaluateExpression();
-        }
-        currentOp = '*';
-        opCleanUp();
-    }
-
-    function add() {
-        if (previousNum) {
-            evaluateExpression();
-        }
-        currentOp = '+';
-        opCleanUp();
-    }
-
-    function subtract() {
-        // If no number has been entered, - is not an operator, but the start of a negative number
-        if (!currentNum) {
-            currentNum = "-";
-            document.getElementById("bottom").textContent = currentNum;
-            return;
-        }
-
-        // Don't want the user to enter "- -"
-        if (currentNum !== "-") {
-            if (previousNum) {
-                evaluateExpression();
-            }
-            currentOp = '-';
-            opCleanUp();
-        }
     }
 
     function opCleanUp() {
