@@ -182,35 +182,33 @@
     }
 
     function evaluateExpression() {
-        if (!currentNum) {
-            return;
+        // Ensure all parts of the expression are present before evaluating
+        if (currentNum && previousNum && currentOp) {
+            // Cast numbers before doing math (avoid doing string concatenation for +)
+            previousNum = Number(previousNum);
+            currentNum = Number(currentNum);
+
+            switch (currentOp) {
+                case "/":
+                    currentNum = previousNum / currentNum;
+                    break;
+                case "*":
+                    currentNum = previousNum * currentNum;
+                    break;
+                case "+":
+                    currentNum = previousNum + currentNum;
+                    break;
+                case "-":
+                    currentNum = previousNum - currentNum;
+                    break;
+                default:
+                    console.error("Unknown operator: " + currentOp);
+            }
+
+            topLine = undefined;
+            document.getElementById("top").textContent = topLine;
+            document.getElementById("bottom").textContent = currentNum;
         }
-
-        console.log(topLine + " " + currentNum);
-
-        previousNum = Number(previousNum);
-        currentNum = Number(currentNum);
-
-        switch (currentOp) {
-            case "/":
-                currentNum = previousNum / currentNum;
-                break;
-            case "*":
-                currentNum = previousNum * currentNum;
-                break;
-            case "+":
-                currentNum = previousNum + currentNum;
-                break;
-            case "-":
-                currentNum = previousNum - currentNum;
-                break;
-            default:
-                console.error("Unknown operator: " + currentOp);
-        }
-
-        topLine = undefined;
-        document.getElementById("top").textContent = topLine;
-        document.getElementById("bottom").textContent = currentNum;
     }
 
     function decimalNum() {
@@ -223,10 +221,6 @@
             currentNum += ".";
             document.getElementById("bottom").textContent = currentNum;
         }
-    }
-
-    function getLastDigit(num) {
-        return String(num).slice(-1);
     }
 </script>
 </body>
