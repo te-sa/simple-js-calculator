@@ -13,7 +13,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(90deg, rgba(0,159,255,1) 0%, rgba(80,212,195,1) 50%, rgba(34,242,62,1) 100%);
+            background: linear-gradient(90deg, rgba(0, 159, 255, 1) 0%, rgba(80, 212, 195, 1) 50%, rgba(34, 242, 62, 1) 100%);
         }
 
         .number-pad-wrapper {
@@ -43,7 +43,7 @@
                 color: white;
             }
 
-            .top {
+            #top {
                 font-size: 18px;
                 padding-bottom: 5px;
                 opacity: 0.75;
@@ -70,29 +70,80 @@
 
 <div>
     <div class="display">
-        <p class="top">32 +</p>
-        <p>69</p>
+        <p id="top">32 +</p>
+        <p id="bottom">69</p>
     </div>
     <div class="number-pad-wrapper">
-        <button style="grid-area: ac">AC</button>
-        <button style="grid-area: del">DEL</button>
-        <button style="grid-area: div">/</button>
-        <button style="grid-area: one">1</button>
-        <button style="grid-area: two">2</button>
-        <button style="grid-area: three">3</button>
-        <button style="grid-area: times">*</button>
-        <button style="grid-area: four">4</button>
-        <button style="grid-area: five">5</button>
-        <button style="grid-area: six">6</button>
-        <button style="grid-area: plus">+</button>
-        <button style="grid-area: seven">7</button>
-        <button style="grid-area: eight">8</button>
-        <button style="grid-area: nine">9</button>
-        <button style="grid-area: minus">-</button>
+        <button style="grid-area: ac" onclick="allClear()">AC</button>
+        <button style="grid-area: del" onclick="deleteDigit()">DEL</button>
+        <button style="grid-area: div" onclick="divide()">/</button>
+        <button style="grid-area: one" onclick="assignNum('1')">1</button>
+        <button style="grid-area: two" onclick="assignNum('2')">2</button>
+        <button style="grid-area: three" onclick="assignNum('3')">3</button>
+        <button style="grid-area: times" onclick="multiply()">*</button>
+        <button style="grid-area: four" onclick="assignNum('4')">4</button>
+        <button style="grid-area: five" onclick="assignNum('5')">5</button>
+        <button style="grid-area: six" onclick="assignNum('6')">6</button>
+        <button style="grid-area: plus" onclick="addition()">+</button>
+        <button style="grid-area: seven" onclick="assignNum('7')">7</button>
+        <button style="grid-area: eight" onclick="assignNum('8')">8</button>
+        <button style="grid-area: nine" onclick="assignNum('9')">9</button>
+        <button style="grid-area: minus" onclick="subtraction()">-</button>
         <button style="grid-area: period">.</button>
-        <button style="grid-area: zero">0</button>
-        <button style="grid-area: equals">=</button>
+        <button style="grid-area: zero" onclick="assignNum('0')">0</button>
+        <button style="grid-area: equals" onclick="evaluateExpression()">=</button>
     </div>
 </div>
+<script>
+    let topLine;
+    let currentNum;
+    let currentOp;
+
+    function setTopLine(currentNum) {
+        return currentNum + " " + currentOp;
+    }
+
+    function assignNum(num) {
+        if (!currentNum) {
+            currentNum = num;
+        } else {
+            topLine = setTopLine(currentNum);
+            currentNum = num;
+        }
+
+        document.getElementById("top").textContent = topLine;
+        document.getElementById("bottom").textContent = currentNum;
+    }
+
+    function allClear() {
+        console.log("All clear");
+    }
+
+    function deleteDigit() {
+        const numWithoutLastDigit = String(currentNum).slice(0, -1);
+        document.getElementById("bottom").textContent = numWithoutLastDigit;
+        currentNum = numWithoutLastDigit;
+    }
+
+    function divide() {
+        currentOp = '/'
+    }
+
+    function multiply() {
+        currentOp = '*'
+    }
+
+    function addition() {
+        currentOp = '+'
+    }
+
+    function subtraction() {
+        currentOp = '-'
+    }
+
+    function evaluateExpression() {
+        console.log(topLine + " " + currentNum)
+    }
+</script>
 </body>
 </html>
