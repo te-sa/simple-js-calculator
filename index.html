@@ -104,11 +104,11 @@
     let currentOp;
 
     function setTop(previousNum, currentOp) {
-        document.getElementById("top").textContent = (previousNum && currentOp) ? previousNum + " " + currentOp : undefined;
+        document.getElementById("top").textContent = (previousNum && currentOp) ? formatWithCommas(previousNum) + " " + currentOp : undefined;
     }
 
     function setBottom(currentNum) {
-        document.getElementById("bottom").textContent = currentNum ? currentNum : undefined;
+        document.getElementById("bottom").textContent = currentNum ? formatWithCommas(currentNum) : undefined;
     }
 
     document.getElementById('number-pad-wrapper').addEventListener("click", (event) => {
@@ -264,6 +264,11 @@
             setTop(previousNum, currentOp);
             setBottom(currentNum);
         }
+    }
+
+    // from https://stackoverflow.com/questions/2901102/how-to-format-a-number-with-commas-as-thousands-separators
+    function formatWithCommas(number) {
+        return number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
     }
 </script>
 </body>
