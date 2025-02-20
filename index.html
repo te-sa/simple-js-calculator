@@ -103,9 +103,15 @@
     let currentNum, previousNum;
     let currentOp;
 
-    const numberPad = document.getElementById('number-pad-wrapper');
+    function setTop(previousNum, currentOp) {
+        document.getElementById("top").textContent = (previousNum && currentOp) ? previousNum + " " + currentOp : undefined;
+    }
 
-    numberPad.addEventListener("click", (event) => {
+    function setBottom(currentNum) {
+        document.getElementById("bottom").textContent = currentNum ? currentNum : undefined;
+    }
+
+    document.getElementById('number-pad-wrapper').addEventListener("click", (event) => {
         if (event.target.tagName === 'BUTTON') {
             const buttonText = event.target.innerText;
 
@@ -119,7 +125,13 @@
                 case "/":
                 case "*":
                 case "+":
-                    handleOperator(buttonText);
+                    // If an operator has been selected already, allow the user to change the selected operator
+                    if (!currentOp || currentOp === "-") {
+                        handleOperator(buttonText);
+                    } else {
+                        currentOp = buttonText;
+                        setTop(previousNum, currentOp);
+                    }
                     break;
                 case "-":
                     subtract();
@@ -153,14 +165,16 @@
         currentNum = undefined;
         currentOp = undefined;
 
-        document.getElementById("top").textContent = undefined;
-        document.getElementById("bottom").textContent = currentNum;
+        setTop(previousNum, currentOp);
+        setBottom(currentNum);
     }
 
     function deleteDigit() {
-        const numWithoutLastDigit = String(currentNum).slice(0, -1);
-        document.getElementById("bottom").textContent = numWithoutLastDigit;
-        currentNum = numWithoutLastDigit;
+        // Don't try deleting if currentNum is not defined
+        if (currentNum) {
+            currentNum = String(currentNum).slice(0, -1);
+            setBottom(currentNum);
+        }
     }
 
     function handleOperator(operator) {
@@ -178,7 +192,7 @@
         // If no number has been entered, - is not an operator, but the start of a negative number
         if (!currentNum) {
             currentNum = "-";
-            document.getElementById("bottom").textContent = currentNum;
+            setBottom(currentNum);
             return;
         }
 
@@ -193,10 +207,10 @@
     }
 
     function opCleanUp() {
-        document.getElementById("top").textContent = currentNum + " " + currentOp;
         previousNum = currentNum;
         currentNum = undefined;
-        document.getElementById("bottom").textContent = currentNum;
+        setTop(previousNum, currentOp);
+        setBottom(currentNum);
     }
 
     function assignNum(num) {
@@ -206,7 +220,7 @@
             currentNum += "" + num;
         }
 
-        document.getElementById("bottom").textContent = currentNum;
+        setBottom(currentNum);
     }
 
     function decimalNum() {
@@ -217,7 +231,7 @@
                 currentNum = 0;
             }
             currentNum += ".";
-            document.getElementById("bottom").textContent = currentNum;
+            setBottom(currentNum);
         }
     }
 
@@ -247,8 +261,8 @@
 
             previousNum = undefined;
             currentOp = undefined;
-            document.getElementById("top").textContent = undefined;
-            document.getElementById("bottom").textContent = currentNum;
+            setTop(previousNum, currentOp);
+            setBottom(currentNum);
         }
     }
 </script>
