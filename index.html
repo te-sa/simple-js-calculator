@@ -90,11 +90,11 @@
         <button style="grid-area: four" onclick="assignNum('4')">4</button>
         <button style="grid-area: five" onclick="assignNum('5')">5</button>
         <button style="grid-area: six" onclick="assignNum('6')">6</button>
-        <button style="grid-area: plus" onclick="addition()">+</button>
+        <button style="grid-area: plus" onclick="add()">+</button>
         <button style="grid-area: seven" onclick="assignNum('7')">7</button>
         <button style="grid-area: eight" onclick="assignNum('8')">8</button>
         <button style="grid-area: nine" onclick="assignNum('9')">9</button>
-        <button style="grid-area: minus" onclick="subtraction()">-</button>
+        <button style="grid-area: minus" onclick="subtract()">-</button>
         <button style="grid-area: period" onclick="decimalNum()">.</button>
         <button style="grid-area: zero" onclick="assignNum('0')">0</button>
         <button style="grid-area: equals" onclick="evaluateExpression()">=</button>
@@ -147,7 +147,7 @@
         opCleanUp();
     }
 
-    function addition() {
+    function add() {
         if (previousNum) {
             evaluateExpression();
         }
@@ -155,7 +155,7 @@
         opCleanUp();
     }
 
-    function subtraction() {
+    function subtract() {
         // If no number has been entered, - is not an operator, but the start of a negative number
         if (!currentNum) {
             currentNum = "-";
@@ -205,6 +205,8 @@
                     console.error("Unknown operator: " + currentOp);
             }
 
+            previousNum = undefined;
+            currentOp = undefined;
             topLine = undefined;
             document.getElementById("top").textContent = topLine;
             document.getElementById("bottom").textContent = currentNum;
