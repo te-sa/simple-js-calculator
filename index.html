@@ -97,6 +97,7 @@
 <script>
     let topLine;
     let currentNum;
+    let previousNum;
     let currentOp;
 
     function assignNum(num) {
@@ -123,6 +124,7 @@
         currentOp = '/';
         topLine = currentNum + " " + currentOp;
         document.getElementById("top").textContent = topLine;
+        previousNum = currentNum;
         currentNum = undefined;
     }
 
@@ -130,6 +132,7 @@
         currentOp = '*';
         topLine = currentNum + " " + currentOp;
         document.getElementById("top").textContent = topLine;
+        previousNum = currentNum;
         currentNum = undefined;
     }
 
@@ -137,6 +140,7 @@
         currentOp = '+';
         topLine = currentNum + " " + currentOp;
         document.getElementById("top").textContent = topLine;
+        previousNum = currentNum;
         currentNum = undefined;
     }
 
@@ -144,11 +148,34 @@
         currentOp = '-';
         topLine = currentNum + " " + currentOp;
         document.getElementById("top").textContent = topLine;
+        previousNum = currentNum;
         currentNum = undefined;
     }
 
     function evaluateExpression() {
         console.log(topLine + " " + currentNum);
+
+        previousNum = Number(previousNum);
+        currentNum = Number(currentNum);
+
+        switch (currentOp) {
+            case "/":
+                currentNum = previousNum / currentNum;
+                break;
+            case "*":
+                currentNum = previousNum * currentNum;
+                break;
+            case "+":
+                currentNum = previousNum + currentNum;
+                break;
+            case "-":
+                currentNum = previousNum - currentNum;
+                break;
+            default:
+                console.error("Unknown operator: " + currentOp);
+        }
+
+        document.getElementById("bottom").textContent = currentNum;
     }
 </script>
 </body>
