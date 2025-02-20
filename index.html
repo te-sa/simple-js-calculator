@@ -95,7 +95,7 @@
         <button style="grid-area: eight" onclick="assignNum('8')">8</button>
         <button style="grid-area: nine" onclick="assignNum('9')">9</button>
         <button style="grid-area: minus" onclick="subtraction()">-</button>
-        <button style="grid-area: period">.</button>
+        <button style="grid-area: period" onclick="decimalNum()">.</button>
         <button style="grid-area: zero" onclick="assignNum('0')">0</button>
         <button style="grid-area: equals" onclick="evaluateExpression()">=</button>
     </div>
@@ -197,6 +197,22 @@
         topLine = undefined;
         document.getElementById("top").textContent = topLine;
         document.getElementById("bottom").textContent = currentNum;
+    }
+
+    function decimalNum() {
+        // Ensure a number can not contain multiple decimal points
+        if (!String(currentNum).includes(".")) {
+            // If user types a decimal point with no number, replace that with 0.
+            if (!currentNum) {
+                currentNum = 0;
+            }
+            currentNum += ".";
+            document.getElementById("bottom").textContent = currentNum;
+        }
+    }
+
+    function getLastDigit(num) {
+        return String(num).slice(-1);
     }
 </script>
 </body>
