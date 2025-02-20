@@ -70,8 +70,8 @@
 
 <div>
     <div class="display">
-        <p id="top">32 +</p>
-        <p id="bottom">69</p>
+        <p id="top"></p>
+        <p id="bottom"></p>
     </div>
     <div class="number-pad-wrapper">
         <button style="grid-area: ac" onclick="allClear()">AC</button>
@@ -99,19 +99,13 @@
     let currentNum;
     let currentOp;
 
-    function setTopLine(currentNum) {
-        return currentNum + " " + currentOp;
-    }
-
     function assignNum(num) {
         if (!currentNum) {
             currentNum = num;
         } else {
-            topLine = setTopLine(currentNum);
-            currentNum = num;
+            currentNum += "" + num;
         }
 
-        document.getElementById("top").textContent = topLine;
         document.getElementById("bottom").textContent = currentNum;
     }
 
@@ -126,23 +120,35 @@
     }
 
     function divide() {
-        currentOp = '/'
+        currentOp = '/';
+        topLine = currentNum + " " + currentOp;
+        document.getElementById("top").textContent = topLine;
+        currentNum = undefined;
     }
 
     function multiply() {
-        currentOp = '*'
+        currentOp = '*';
+        topLine = currentNum + " " + currentOp;
+        document.getElementById("top").textContent = topLine;
+        currentNum = undefined;
     }
 
     function addition() {
-        currentOp = '+'
+        currentOp = '+';
+        topLine = currentNum + " " + currentOp;
+        document.getElementById("top").textContent = topLine;
+        currentNum = undefined;
     }
 
     function subtraction() {
-        currentOp = '-'
+        currentOp = '-';
+        topLine = currentNum + " " + currentOp;
+        document.getElementById("top").textContent = topLine;
+        currentNum = undefined;
     }
 
     function evaluateExpression() {
-        console.log(topLine + " " + currentNum)
+        console.log(topLine + " " + currentNum);
     }
 </script>
 </body>
