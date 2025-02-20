@@ -164,6 +164,9 @@
     }
 
     function handleOperator(operator) {
+        if (!currentNum) {
+            currentNum = 0;
+        }
         if (previousNum) {
             evaluateExpression();
         }
@@ -190,9 +193,9 @@
     }
 
     function opCleanUp() {
+        document.getElementById("top").textContent = currentNum + " " + currentOp;
         previousNum = currentNum;
         currentNum = undefined;
-        document.getElementById("top").textContent = currentNum + " " + currentOp;
         document.getElementById("bottom").textContent = currentNum;
     }
 
