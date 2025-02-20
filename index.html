@@ -6,6 +6,7 @@
         * {
             font-size: 24px;
             font-family: "Arial Rounded MT Bold", sans-serif;
+            box-sizing: border-box;
         }
 
         body {
@@ -47,6 +48,11 @@
                 font-size: 18px;
                 padding-bottom: 5px;
                 opacity: 0.75;
+                height: 26px;
+            }
+
+            #bottom {
+                height: 28px;
             }
         }
 
@@ -96,8 +102,7 @@
 </div>
 <script>
     let topLine;
-    let currentNum;
-    let previousNum;
+    let currentNum, previousNum;
     let currentOp;
 
     function assignNum(num) {
@@ -111,7 +116,13 @@
     }
 
     function allClear() {
-        console.log("All clear");
+        currentNum = undefined;
+        previousNum = undefined;
+        currentOp = undefined;
+        topLine = undefined;
+
+        document.getElementById("bottom").textContent = currentNum;
+        document.getElementById("top").textContent = topLine;
     }
 
     function deleteDigit() {
@@ -175,6 +186,8 @@
                 console.error("Unknown operator: " + currentOp);
         }
 
+        topLine = undefined;
+        document.getElementById("top").textContent = topLine;
         document.getElementById("bottom").textContent = currentNum;
     }
 </script>
