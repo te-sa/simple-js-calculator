@@ -156,11 +156,21 @@
     }
 
     function subtraction() {
-        if (previousNum) {
-            evaluateExpression();
+        // If no number has been entered, - is not an operator, but the start of a negative number
+        if (!currentNum) {
+            currentNum = "-";
+            document.getElementById("bottom").textContent = currentNum;
+            return;
         }
-        currentOp = '-';
-        opCleanUp();
+
+        // Don't want the user to enter "- -"
+        if (currentNum !== "-") {
+            if (previousNum) {
+                evaluateExpression();
+            }
+            currentOp = '-';
+            opCleanUp();
+        }
     }
 
     function opCleanUp() {
@@ -172,6 +182,10 @@
     }
 
     function evaluateExpression() {
+        if (!currentNum) {
+            return;
+        }
+
         console.log(topLine + " " + currentNum);
 
         previousNum = Number(previousNum);
