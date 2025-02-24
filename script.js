@@ -1,22 +1,24 @@
 let currentNum, previousNum;
 let currentOp;
 
-const Operators = {
-    Minus: '-',
-    Plus: '+',
-    Divide: '÷',
-    Multiply: '*'
+const Symbols = {
+    MINUS: '-',
+    PLUS: '+',
+    DIVIDE: '÷',
+    MULTIPLY: '*',
+    COMMA: ",",
+    PERIOD: ".",
 }
 
 function setTop(previousNum, currentOp) {
-    document.getElementById("top").textContent = (previousNum && currentOp) ? formatWithCommas(previousNum) + " " + currentOp : undefined;
+    document.getElementById("top").textContent = (previousNum && currentOp) ? formatWithCommas(previousNum) + " " + currentOp : '';
 }
 
 function setBottom(currentNum) {
-    document.getElementById("bottom").textContent = currentNum ? formatWithCommas(currentNum) : undefined;
+    document.getElementById("bottom").textContent = currentNum ? formatWithCommas(currentNum) : '';
 }
 
-document.getElementById('number-pad-wrapper').addEventListener("click", (event) => {
+document.getElementById('calculator-wrapper').addEventListener("click", (event) => {
     if (event.target.tagName === 'BUTTON') {
         const buttonText = event.target.innerText;
 
@@ -27,18 +29,13 @@ document.getElementById('number-pad-wrapper').addEventListener("click", (event) 
             case "DEL":
                 deleteDigit();
                 break;
-            case Operators.Divide:
-            case Operators.Multiply:
-            case Operators.Plus:
-                // If an operator has been selected already, allow the user to change the selected operator
-                if (!currentOp || currentOp === "-") {
-                    handleOperator(buttonText);
-                } else {
-                    currentOp = buttonText;
-                    setTop(previousNum, currentOp);
-                }
+            case Symbols.DIVIDE:
+            case Symbols.MULTIPLY:
+            case Symbols.PLUS:
+                // TODO: If an operator has been selected already, allow the user to change the selected operator
+                handleOperator(buttonText);
                 break;
-            case Operators.Minus:
+            case Symbols.MINUS:
                 subtract();
                 break;
             case "0":
@@ -53,7 +50,7 @@ document.getElementById('number-pad-wrapper').addEventListener("click", (event) 
             case "9":
                 assignNum(buttonText);
                 break;
-            case ".":
+            case Symbols.PERIOD:
                 decimalNum();
                 break;
             case "=":
@@ -89,6 +86,9 @@ function handleOperator(operator) {
     if (previousNum) {
         evaluateExpression();
     }
+    if (currentOp) {
+        return;
+    }
     currentOp = operator;
     opCleanUp();
 }
@@ -96,17 +96,17 @@ function handleOperator(operator) {
 function subtract() {
     // If no number has been entered, - is not an operator, but the start of a negative number
     if (!currentNum) {
-        currentNum = "-";
+        currentNum = Symbols.MINUS;
         setBottom(currentNum);
         return;
     }
 
     // Don't want the user to enter "- -"
-    if (currentNum !== "-") {
+    if (currentNum !== Symbols.MINUS) {
         if (previousNum) {
             evaluateExpression();
         }
-        currentOp = '-';
+        currentOp = Symbols.MINUS;
         opCleanUp();
     }
 }
@@ -130,34 +130,34 @@ function assignNum(num) {
 
 function decimalNum() {
     // Ensure a number can not contain multiple decimal points
-    if (!String(currentNum).includes(".")) {
+    if (!String(currentNum).includes(Symbols.PERIOD)) {
         // If user types a decimal point with no number, replace that with 0.
         if (!currentNum) {
             currentNum = 0;
         }
-        currentNum += ".";
+        currentNum += Symbols.PERIOD;
         setBottom(currentNum);
     }
 }
 
 function evaluateExpression() {
     // Ensure all parts of the expression are present before evaluating
-    if (currentNum && previousNum && currentOp) {
+    if (currentNum && currentNum !== Symbols.MINUS && previousNum && currentOp) {
         // Cast numbers before doing math (avoid doing string concatenation for +)
         previousNum = Number(previousNum);
         currentNum = Number(currentNum);
 
         switch (currentOp) {
-            case Operators.Divide:
+            case Symbols.DIVIDE:
                 currentNum = previousNum / currentNum;
                 break;
-            case Operators.Multiply:
+            case Symbols.MULTIPLY:
                 currentNum = previousNum * currentNum;
                 break;
-            case Operators.Plus:
+            case Symbols.PLUS:
                 currentNum = previousNum + currentNum;
                 break;
-            case Operators.Minus:
+            case Symbols.MINUS:
                 currentNum = previousNum - currentNum;
                 break;
             default:
@@ -173,5 +173,5 @@ function evaluateExpression() {
 
 // from https://stackoverflow.com/questions/2901102/how-to-format-a-number-with-commas-as-thousands-separators
 function formatWithCommas(number) {
-    return number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+    return number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, Symbols.COMMA);
 }
