@@ -8,7 +8,7 @@ video: [Commit before watching videos](https://github.com/te-sa/simple-js-calcul
 
 ## Learnings:
 
-* Needed <meta charset="UTF-8"> to be able to display ÷
+* Needed `<meta charset="UTF-8">` to be able to display ÷
 * Can’t use non-string values in grid template areas
     * . to get empty space
 * [Event Delegation](https://www.freecodecamp.org/news/event-delegation-javascript/)
